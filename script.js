@@ -3,7 +3,9 @@ const startButton = document.getElementById("start-scan");
 const stopButton = document.getElementById("stop-scan");
 const statusEl = document.getElementById("status");
 const successImg = document.getElementById("success-img");
+const wrapper = document.getElementById('video-wrapper');
 
+let successTimerId = null;
 let labeledFaceDescriptors;
 let faceMatcher;
 let canvas;
@@ -71,7 +73,14 @@ function startWebcamAndDetection() {
 function onPlay() {
   if (canvas) canvas.remove();
   canvas = faceapi.createCanvasFromMedia(video);
-  document.body.append(canvas);
+  // document.body.append(canvas);
+
+  canvas.style.position = 'absolute';
+  canvas.style.top = '0';
+  canvas.style.left = '0';
+  canvas.style.pointerEvents = 'none';
+
+  wrapper.append(canvas);
 
   const displaySize = { width: video.width, height: video.height };
   faceapi.matchDimensions(canvas, displaySize);
@@ -166,8 +175,15 @@ function resetStable(msg) {
 
 function markAttendanceSuccess(label) {
   statusEl.textContent = `${label} hadir! (kehadiran tercatat — cooldown 30s)`;
-  successImg.classList.remove("d-none");
+
+  // successImg.classList.remove("d-none");
   successImg.src = "safe.jpg";
+  successImg.classList.remove("d-none");
+
+  if (successTimerId) clearTimeout(successTimerId);
+  successTimerId = setTimeout(() => {
+    successImg.classList.add("d-none");
+  }, 3000);
 }
 
 async function getLabeledFaceDescriptions() {

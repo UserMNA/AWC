@@ -17,6 +17,13 @@ canvas {
     border-radius: 8px;
 }
 
+#video-wrapper canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
 button {
     margin-top: 10px;
 }
