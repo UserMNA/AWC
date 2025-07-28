@@ -15,7 +15,7 @@ let stream;
 const MODEL_URL = "./models";
 const LABELS_BASE = "./labels";
 
-const STABLE_SECONDS = 5;
+const STABLE_SECONDS = 3;
 const PASS_THRESHOLD = 0.6;
 const COOLDOWN_MS = 30_000;
 
