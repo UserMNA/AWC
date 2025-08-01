@@ -10,19 +10,18 @@
 </head>
 <body>
   <div class="d-flex flex-column align-items-center gap-3">
-    <div id="video-wrapper" class="position-relative d-inline-block">
-      <video id="video" width="600" height="450" autoplay muted playsinline></video>
+    <div id="video-wrapper" class="position-relative d-inline-block" style="position: relative;">
+      <video id="video" width="640" height="480" autoplay muted playsinline></video>
+      <img id="success-img" src="safe.jpg" class="d-none" alt="Success"
+      style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index: 10;">
     </div>
+    <div id="status" class="mt-2 text-muted">Loading models…</div>
     
     <div class="d-flex gap-2">
       <button id="start-scan" class="btn btn-primary" type="button" disabled>Start Scan</button>
       <button id="stop-scan" class="btn btn-danger" type="button" disabled>Stop Scan</button>
     </div>
-
-    <div id="status" class="mt-2 text-muted">Loading models…</div>
-    <img id="success-img" src="safe.jpg" class="d-none mt-3" width="240" alt="Success">
   </div>
-
 
   <script defer src="face-api.min.js"></script>
   <script defer src="script.js"></script>
