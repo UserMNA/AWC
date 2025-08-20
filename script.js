@@ -99,9 +99,6 @@ function onPlay() {
       const resizedDetections = faceapi.resizeResults(detections, displaySize);
       canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
 
-      const ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
       const results = resizedDetections.map(d =>
         faceMatcher.findBestMatch(d.descriptor)
       );
@@ -202,7 +199,7 @@ function markAttendanceSuccess(label) {
 }
 
 async function postAttendance(label) {
-  const [name, id] = label.split(', '); // Split "Ali, 3323"
+  const [name, id] = label.split('_'); // Split "Ali, 3323"
   await fetch('/api/attendance', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -217,25 +214,21 @@ async function postAttendance(label) {
 }
 
 async function getLabeledFaceDescriptions() {
-  const labels = ["ali_3323", "aspian_1326", "ikmal_8056", "ikhsan_5196", "daus_4291"];
+  const labels = ["ali_9925", "aspian_9924", "daus_9923", "fadil_9914", "ikhsan_9911", "ikmal_9919", "lutfi_9920"];
   return Promise.all(
     labels.map(async (label) => {
       const descriptions = [];
-      for (let i = 1; i <= 2; i++) {
-        const img = await faceapi.fetchImage(
-          `${LABELS_BASE}/${encodeURIComponent(label)}/${i}.jpg`
-        );
-        const detections = await faceapi
-          .detectSingleFace(img)
-          .withFaceLandmarks()
-          .withFaceDescriptor();
-        if (!detections) {
-          console.warn(`No face found for ${label}/${i}.jpg`);
-          continue;
-        }
-        descriptions.push(detections.descriptor);
+      const img = await faceapi.fetchImage(`${LABELS_BASE}/${encodeURIComponent(label)}.jpg`);
+      const detection = await faceapi
+        .detectSingleFace(img)
+        .withFaceLandmarks()
+        .withFaceDescriptor();
+      if (!detection) {
+        console.warn(`No face found for ${label}.jpg`);
+        return null;
       }
+      descriptions.push(detection.descriptor);
       return new faceapi.LabeledFaceDescriptors(label, descriptions);
     })
-  );
+  ).then(results => results.filter(r => r !== null)); // remove failed ones
 }
